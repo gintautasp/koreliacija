@@ -1,0 +1,19 @@
+Procesų atskaitų rinkiniai:
+1. normalizuoti pasirinkto rinkinio atskaitas pagal formulę normalizuota_reiksme = daugiklis * reiksme + konstanta
+2. normalizuoti pasirinkto rinkinio atskaitas pagal laiko (x ašies) atskaitas (? - neaišku ar reikalinga) - tiesinė interpoliacija
+3. susumuoti kelis rinkinius ir taip gauti naują rinkinį
+4. įvykdyti koreliaciją tarp dviejų rinkinių ir taip gauti koreliacijos rinkinį
+5. pavaizduoti bet kurį rinkinį lentele ir grafiškai
+-----
+versija 1:
+3 rinkiniai: 
+1. sugeneruota atsitiktinių skaičių seka
+2. sugeneruotas sinusinis siganalas
+3. pasiima rinkinį iš vartotojo failo vartotojo-rinkinys.js
+
+versija 2:
+pasiimamas galimų rinkinių sąrašas iš serverio
+pasiimas norimas rinkinys iš serverio
+
+
+

@@ -12,6 +12,11 @@
 				padding: 10px;
 				margin: 10px;
 			}
+			.kontroles_dalis {
+			
+				margin: 3px;
+				background-color: BlanchedAlmond;
+			}
 			#lenteles {
 			
 				width: 55%;
@@ -30,34 +35,76 @@
 				margin-bottom: 5px;
 			}
 		</style>
+		<script>
+			
+			rinkiniu_sekos = [];
+			
+			function SekuSarasas() {
+			
+				sar_html = '<table>';
+			
+				for ( i = 0; i< rinkiniu_sekos.length; i++ ) {
+				
+					sar_html +=  '<tr><td>' + rinkiniu_sekos [ i ].pav + '</td><td><input type="checkbox" id="seka_' + i + '"></td></tr>'
+				}
+				sar_html += '</table>';
+				
+				rinkiniu_sarasas = document.getElementById ( 'rinkiniu_sarasas' );
+
+				rinkiniu_sarasas.innerHTML = sar_html;
+			}
+			
+			function AtsitiktineSeka() {
+			
+				sk_atskaitu = parseInt ( document.getElementById ( 'sk_atskaitu' ).value );
+				pav = document.getElementById ( 'pav' ).value;
+				
+				alert( pav );
+				
+				nauja_seka = {
+				
+					pav: pav
+					, atskaitos: []
+				}
+				
+				for ( i = 0; i <  sk_atskaitu; i++ ) {
+				
+					nauja_seka.atskaitos.push ( { y: Math.random(), x: i } ); 
+				}
+				rinkiniu_sekos.push ( nauja_seka );
+				
+				SekuSarasas();
+			}
+			
+		</script>
 	</head>
 	<body>
 		<div id="kontrole">
-			<div id="rinkiniu_sarasas">
-				
+			<div id="rinkiniu_sarasas" class="kontroles_dalis">
+				Rinkinių sąrašas  tuščias
 			</div>		
-			<div id="rinkinio_pavadinimas">
+			<div id="veiksmai_su_pasirinku_rinkiniu" class="kontroles_dalis">
+				<input type="button" id="salinti" disabled value="Šalinti">			
+				<input type="button" id="parodyti" disabled value="Parodyti">					
+			</div>		
+			<div id="rinkinio_sudarymas" class="kontroles_dalis">
 				<label for="pav">Pavadinimas *</label>
-				<input type="text" id="pav">				
-			</div>		
-			<div id="veiksmai_su_rinkiniu">
+				<input type="text" id="pav" value="Bandymas 1">		
 				<label for="daugiklis">Daugiklis</label>
 				<input type="number" id="daugiklis" value="1">
 				<label for="konstanta">Konstanta</label>
 				<input type="number" id="konstanta" value="0">
-				<input type="button" id="normalizuoti" value="Normalizuoti">
+				<input type="button" id="normalizuoti" disabled value="Normalizuoti pasirinktą rinkinį">
 				<label for="laiko_intervalas">Laiko intervalas</label>
-				<input type="number" id="laiko_intervalas" value="1">				
-				<input type="button" id="interpoliuoti" value="Interpoliuoti">			
-				<input type="button" id="susumuoti" value="Susumuoti">	
-				<input type="button" id="koreliacija" value="Koreliacija">					
-			</div>			
-			<div id="rinkinio_sudarymas">
+				<input type="number" id="laiko_intervalas" disabled value="1">				
+				<input type="button" id="interpoliuoti" disabled value="Interpoliuoti pasirinktą rinkinį">			
+				<input type="button" id="susumuoti" disabled value="Susumuoti 2-u pasirinktus rinkinius">	
+				<input type="button" id="koreliacija" disabled value="Atlikti koreliacija su 2-iem pasirinktais rinkiniais">
 				<label for="sk_atskaitu">Atskaitų skaičius</label>
 				<input type="number" id="sk_atskaitu" value="1000" min="10" max="10000">
 				<label for="sk_periodu">Periodų skaičius</label>
 				<input type="number" id="sk_periodu" value="10">
-				<input type="button" id="make_random_values" value="Sugeneruoti atsitikitinių skaičių seką">
+				<input type="button" id="make_random_values" value="Sugeneruoti atsitikitinių skaičių seką" onClick="AtsitiktineSeka()">
 				<input type="button" id="make_periodic_values" value="Sugeneruoti sinuso skaičių seką">
 			</div>
 		</div>

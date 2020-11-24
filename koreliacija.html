@@ -73,7 +73,7 @@
 			
 			function AtsitiktineSeka( pav, sk_atskaitu ) {
 		
-				alert( pav );
+				// alert( pav );
 				
 				nauja_seka = {
 				
@@ -84,6 +84,27 @@
 				for ( i = 0; i <  sk_atskaitu; i++ ) {
 				
 					nauja_seka.atskaitos.push ( { y: Math.random(), x: i } ); 
+				}
+				rinkiniu_sekos.push ( nauja_seka );
+			}			
+			
+			function SinusineSeka( pav, sk_atskaitu, kiekis_periodu ) {
+		
+				alert( pav );
+				
+				du_pi = 2 *  4 * Math.atan ( 1.0 );
+				
+				i_verte = ( kiekis_periodu * du_pi )/ sk_atskaitu;
+				
+				nauja_seka = {
+				
+					pav: pav
+					, atskaitos: []
+				}
+				
+				for ( i = 0; i <  sk_atskaitu; i++ ) {
+				
+					nauja_seka.atskaitos.push ( { y: Math.sin( i * i_verte ), x: i } ); 
 				}
 				rinkiniu_sekos.push ( nauja_seka );
 			}			
@@ -131,6 +152,18 @@
 					SekuSarasas();
 					poSekuSarasoAtnaujinimo();
 				});
+				
+				$(  '#make_periodic_values' ).click ( function() {
+				
+					sk_atskaitu = parseInt ( $( '#sk_atskaitu' ).val() );
+					sk_periodu = parseInt ( $( '#sk_periodu' ).val() );
+					pav = $( '#pav' ).val();
+					
+					SinusineSeka( pav, sk_atskaitu, sk_periodu ); 
+					SekuSarasas();
+					poSekuSarasoAtnaujinimo();
+				});				
+				
 				
 				$( '#parodyti' ).click ( function() {
 				

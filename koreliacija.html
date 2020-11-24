@@ -15,6 +15,7 @@
 			.kontroles_dalis {
 			
 				margin: 3px;
+				padding: 3px;
 				background-color: BlanchedAlmond;
 			}
 			#lenteles {
@@ -27,17 +28,33 @@
 			label, input {
 			
 				width: 96%;
-				margin: 10px;
-				padding: 10px;
+				margin: 7px;
+				padding: 7px;
 			}
 			label {
 				margin-top: 30px;
 				margin-bottom: 5px;
 			}
 		</style>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		<script>
 			
 			rinkiniu_sekos = [];
+			
+			function ParodytiSarasa ( nr ) {
+			
+				sar_lent = '<table><tr><th>x</th><th>y</th></tr>';
+				
+				// alert ( nr + ':' + rinkiniu_sekos [ nr ].atskaitos.length );
+				
+				for ( i = 0; i < rinkiniu_sekos [ nr ].atskaitos.length; i++ ) {
+					
+					sar_lent += '<tr><td>'  + rinkiniu_sekos [ nr ].atskaitos [ i ].x + '</td><td>' + rinkiniu_sekos [ nr ].atskaitos [ i ].y   +'</td></tr>'
+				}
+				sar_lent += '</table>';
+				
+				return sar_lent;
+			}
 			
 			function SekuSarasas() {
 			
@@ -45,7 +62,7 @@
 			
 				for ( i = 0; i< rinkiniu_sekos.length; i++ ) {
 				
-					sar_html +=  '<tr><td>' + rinkiniu_sekos [ i ].pav + '</td><td><input type="checkbox" id="seka_' + i + '"></td></tr>'
+					sar_html +=  '<tr><td>' + rinkiniu_sekos [ i ].pav + '</td><td><input type="checkbox" data-nr="' + i + '" class="sarasas1"></td></tr>';
 				}
 				sar_html += '</table>';
 				
@@ -54,11 +71,8 @@
 				rinkiniu_sarasas.innerHTML = sar_html;
 			}
 			
-			function AtsitiktineSeka() {
-			
-				sk_atskaitu = parseInt ( document.getElementById ( 'sk_atskaitu' ).value );
-				pav = document.getElementById ( 'pav' ).value;
-				
+			function AtsitiktineSeka( pav, sk_atskaitu ) {
+		
 				alert( pav );
 				
 				nauja_seka = {
@@ -72,9 +86,70 @@
 					nauja_seka.atskaitos.push ( { y: Math.random(), x: i } ); 
 				}
 				rinkiniu_sekos.push ( nauja_seka );
+			}			
+			
+			$ ( document ).ready( function() {
+			
+				function keistiMygtukuPrieiga() {
 				
-				SekuSarasas();
-			}
+					kiekis_pasirinktu_sarasu = 0;
+				
+					$( '.sarasas1' ).each( function() {
+					
+						if ( $( this ).prop ( 'checked' ) ) {
+						
+							kiekis_pasirinktu_sarasu ++;
+						}
+					});
+					
+					alert (  kiekis_pasirinktu_sarasu );
+					
+					if ( kiekis_pasirinktu_sarasu == 1 ) {
+					
+						$( '#salinti' ).prop ( 'disabled', false );
+						$( '#parodyti' ).prop ( 'disabled', false );
+					}
+				}
+			
+				function poSekuSarasoAtnaujinimo() {
+				
+					$( '.sarasas1' ).each ( function() {
+					
+						$( this ).change ( function() {
+						
+							keistiMygtukuPrieiga();
+						});
+					});
+				}
+			
+				$(  '#make_random_values' ).click ( function() {
+				
+					sk_atskaitu = parseInt ( $( '#sk_atskaitu' ).val() );
+					pav = $( '#pav' ).val();
+					
+					AtsitiktineSeka( pav, sk_atskaitu ); 
+					SekuSarasas();
+					poSekuSarasoAtnaujinimo();
+				});
+				
+				$( '#parodyti' ).click ( function() {
+				
+					pasirinktas_sarasas = -1;
+				
+					$( '.sarasas1' ).each( function() {
+				
+						if ( $( this ).prop ( 'checked' ) ) {
+						
+							pasirinktas_sarasas = parseInt ( $( this ).data ( 'nr' ) );
+							
+							if ( pasirinktas_sarasas > -1 ) {
+							
+								$( '#lenteles' ).html ( ParodytiSarasa ( pasirinktas_sarasas ) );
+							}
+						}
+					});
+				});
+			});
 			
 		</script>
 	</head>
@@ -104,7 +179,7 @@
 				<input type="number" id="sk_atskaitu" value="1000" min="10" max="10000">
 				<label for="sk_periodu">Periodų skaičius</label>
 				<input type="number" id="sk_periodu" value="10">
-				<input type="button" id="make_random_values" value="Sugeneruoti atsitikitinių skaičių seką" onClick="AtsitiktineSeka()">
+				<input type="button" id="make_random_values" value="Sugeneruoti atsitikitinių skaičių seką">
 				<input type="button" id="make_periodic_values" value="Sugeneruoti sinuso skaičių seką">
 			</div>
 		</div>

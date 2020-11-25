@@ -25,6 +25,10 @@
 				padding: 10px;
 				margin: 10px;				
 			}
+			.sarasas {
+			
+				display: inline-block;
+			}
 			label, input {
 			
 				width: 96%;
@@ -43,7 +47,7 @@
 			
 			function ParodytiSarasa ( nr ) {
 			
-				sar_lent = '<table><tr><th>x</th><th>y</th></tr>';
+				sar_lent = '<div class="sarasas"><table><tr><th>x</th><th>y</th></tr>';
 				
 				// alert ( nr + ':' + rinkiniu_sekos [ nr ].atskaitos.length );
 				
@@ -51,7 +55,7 @@
 					
 					sar_lent += '<tr><td>'  + rinkiniu_sekos [ nr ].atskaitos [ i ].x + '</td><td>' + rinkiniu_sekos [ nr ].atskaitos [ i ].y   +'</td></tr>'
 				}
-				sar_lent += '</table>';
+				sar_lent += '</table></div>';
 				
 				return sar_lent;
 			}
@@ -107,7 +111,22 @@
 					nauja_seka.atskaitos.push ( { y: Math.sin( i * i_verte ), x: i } ); 
 				}
 				rinkiniu_sekos.push ( nauja_seka );
-			}			
+			}
+
+			function NormalizuotiSarasa ( pasirinktas_sarasas, pav, daugiklis, konstanta ) {
+			
+				nauja_seka = {
+				
+					pav: pav
+					, atskaitos: []
+				}
+				
+				for ( i = 0; i < rinkiniu_sekos [ pasirinktas_sarasas ].atskaitos.length; i++ ) {
+				
+					nauja_seka.atskaitos.push ( { y: ( rinkiniu_sekos [ pasirinktas_sarasas ].atskaitos[ i ].y * daugiklis ) + konstanta, x: rinkiniu_sekos [ pasirinktas_sarasas ].atskaitos[ i ].x } ); 
+				}
+				rinkiniu_sekos.push ( nauja_seka );				
+			}
 			
 			$ ( document ).ready( function() {
 			
@@ -129,6 +148,7 @@
 					
 						$( '#salinti' ).prop ( 'disabled', false );
 						$( '#parodyti' ).prop ( 'disabled', false );
+						$( '#normalizuoti' ).prop ( 'disabled', false );
 					}
 				}
 			
@@ -177,7 +197,31 @@
 							
 							if ( pasirinktas_sarasas > -1 ) {
 							
-								$( '#lenteles' ).html ( ParodytiSarasa ( pasirinktas_sarasas ) );
+								$( '#lenteles' ).html ( ParodytiSarasa ( pasirinktas_sarasas ) + $( '#lenteles' ).html()  );
+							}
+						}
+					});
+				});
+				
+				$( '#normalizuoti' ).click ( function() {
+				
+					daugiklis = parseFloat ( $( '#daugiklis' ).val() );
+					konstanta = parseFloat ( $( '#konstanta' ).val() );
+					pav = $( '#pav' ).val();
+					
+					pasirinktas_sarasas = -1;
+				
+					$( '.sarasas1' ).each( function() {
+				
+						if ( $( this ).prop ( 'checked' ) ) {
+						
+							pasirinktas_sarasas = parseInt ( $( this ).data ( 'nr' ) );
+							
+							if ( pasirinktas_sarasas > -1 ) {
+							
+								NormalizuotiSarasa ( pasirinktas_sarasas, pav, daugiklis, konstanta );
+								SekuSarasas();
+								poSekuSarasoAtnaujinimo();								
 							}
 						}
 					});

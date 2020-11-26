@@ -20,12 +20,10 @@
 			}
 			#lenteles {
 			
-				width: 52%;
+				width: 55%;
 				border: 1px solid grey;	
 				padding: 10px;
-				margin: 10px;
-				height: 900px;
-				overflow: scroll;				
+				margin: 10px;				
 			}
 			.sarasas {
 			
@@ -130,85 +128,6 @@
 				rinkiniu_sekos.push ( nauja_seka );				
 			}
 			
-			function SusumuotiSarasus ( pasirinktas_sarasas1, pasirinktas_sarasas2, pav ) {
-			
-				// sumuodami trumpesnį sąraša "pastumsime" į viduri
-				
-				pastumimas1 = parseInt ( ( rinkiniu_sekos [ pasirinktas_sarasas2 ].length - rinkiniu_sekos [ pasirinktas_sarasas2 ].length ) / 2 );
-				pastumimas2 =  parseInt ( ( rinkiniu_sekos [ pasirinktas_sarasas2 ].length -  rinkiniu_sekos [ pasirinktas_sarasas1 ].length ) / 2 );
-				
-				if ( pastumimas1 > 0 ) {
-				
-					pagrindinis = pasirinktas_sarasas2;
-					trumpesnis = pasirinktas_sarasas1;
-					pastumimas = pastumimas1;
-					
-				} else {
-
-					pagrindinis = pasirinktas_sarasas1;
-					trumpesnis = pasirinktas_sarasas2;
-					pastumimas = pastumimas2;
-				}
-			
-				nauja_seka = {
-				
-					pav: pav
-					, atskaitos: []
-				}				
-
-				for ( i = 0; i < rinkiniu_sekos [ pagrindinis ].atskaitos.length; i++ ) {
-				
-					atskaita_y =  rinkiniu_sekos [ pagrindinis ].atskaitos[ i ].y;
-					
-					if  ( ( i >= pastumimas ) && ( ( i - pastumimas ) < rinkiniu_sekos [ trumpesnis ].atskaitos.length ) ) {
-					
-						atskaita_y += rinkiniu_sekos [ trumpesnis ].atskaitos [ i  - pastumimas ].y;
-					}
-				
-					nauja_seka.atskaitos.push ( { y: atskaita_y, x: i } ); 
-				}
-				rinkiniu_sekos.push ( nauja_seka );
-			}
-			
-			function SarasuKoreliacija ( pasirinktas_sarasas1, pasirinktas_sarasas2, pav ) {
-		
-
-				nauja_seka = {
-				
-					pav: pav
-					, atskaitos: []
-				}
-				
-				postumis1 = rinkiniu_sekos [ pasirinktas_sarasas2 ].atskaitos.length;
-				uodega2 = rinkiniu_sekos [ pasirinktas_sarasas1 ].atskaitos.length;
-				
-				t = -1 * uodega2;
-				
-				for ( i = 0; i < postumis1 + uodega2 + 1; i++ ) {
-
-					atskaita = 0;
-					
-					for ( k = 0; k < rinkiniu_sekos [ pasirinktas_sarasas2 ].atskaitos.length; k++ ) {
-					
-						if ( ( t + k < 0 ) || ( ( t + k ) >= rinkiniu_sekos [ pasirinktas_sarasas1 ].atskaitos.length ) )  {
-							
-							daugiklis = 0;
-
-						} else {
-						
-							daugiklis = rinkiniu_sekos [ pasirinktas_sarasas1 ].atskaitos [ t + k ].y;
-						}
-
-						atskaita += rinkiniu_sekos [ pasirinktas_sarasas2 ].atskaitos [ k ].y * daugiklis;
-					}
-					t++;
-					
-					nauja_seka.atskaitos.push ( { y: atskaita, x: i } );
-				}
-				rinkiniu_sekos.push ( nauja_seka );
-			}
-			
-			
 			$ ( document ).ready( function() {
 			
 				function keistiMygtukuPrieiga() {
@@ -223,27 +142,13 @@
 						}
 					});
 					
-					// alert (  kiekis_pasirinktu_sarasu );
-					
-					$( '#salinti' ).prop ( 'disabled', true );
-					$( '#parodyti' ).prop ( 'disabled', true );
-					$( '#normalizuoti' ).prop ( 'disabled', true );	
-					$( '#susumuoti' ).prop ( 'disabled', true );
-					$( '#koreliacija' ).prop ( 'disabled', true );					
+					alert (  kiekis_pasirinktu_sarasu );
 					
 					if ( kiekis_pasirinktu_sarasu == 1 ) {
 					
 						$( '#salinti' ).prop ( 'disabled', false );
 						$( '#parodyti' ).prop ( 'disabled', false );
 						$( '#normalizuoti' ).prop ( 'disabled', false );
-						$( '#koreliacija' ).prop ( 'disabled', true );
-					}
-					
-					if ( kiekis_pasirinktu_sarasu == 2 ) {
-					
-						$( '#susumuoti' ).prop ( 'disabled', false );
-						$( '#koreliacija' ).prop ( 'disabled', false );					
-					
 					}
 				}
 			
@@ -320,70 +225,6 @@
 							}
 						}
 					});
-				});
-				
-				$( '#susumuoti' ).click ( function() {
-				
-					pav = $( '#pav' ).val();
-					
-					pasirinktas_sarasas1 = -1;
-					pasirinktas_sarasas2 = -1;					
-				
-					$( '.sarasas1' ).each( function() {
-				
-						if ( $( this ).prop ( 'checked' ) ) {
-						
-							if ( pasirinktas_sarasas1 == -1 ) { 
-						
-								pasirinktas_sarasas1 = parseInt ( $( this ).data ( 'nr' ) );
-								
-								
-							} else {
-							
-								pasirinktas_sarasas2 =	parseInt ( $( this ).data ( 'nr' ) );
-							}
-						}
-					});
-					
-					if ( ( pasirinktas_sarasas1 > -1 ) && ( pasirinktas_sarasas1 > -1 ) ) {
-							
-						SusumuotiSarasus ( pasirinktas_sarasas1, pasirinktas_sarasas2, pav );
-						SekuSarasas();
-						poSekuSarasoAtnaujinimo();								
-					}					
-					
-				});
-
-				$( '#koreliacija' ).click ( function() {
-				
-					pav = $( '#pav' ).val();
-					
-					pasirinktas_sarasas1 = -1;
-					pasirinktas_sarasas2 = -1;					
-				
-					$( '.sarasas1' ).each( function() {
-				
-						if ( $( this ).prop ( 'checked' ) ) {
-						
-							if ( pasirinktas_sarasas1 == -1 ) { 
-						
-								pasirinktas_sarasas1 = parseInt ( $( this ).data ( 'nr' ) );
-								
-								
-							} else {
-							
-								pasirinktas_sarasas2 =	parseInt ( $( this ).data ( 'nr' ) );
-							}
-						}
-					});
-					
-					if ( ( pasirinktas_sarasas1 > -1 ) && ( pasirinktas_sarasas1 > -1 ) ) {
-							
-						SarasuKoreliacija ( pasirinktas_sarasas1, pasirinktas_sarasas2, pav );
-						SekuSarasas();
-						poSekuSarasoAtnaujinimo();								
-					}					
-					
 				});
 			});
 			
